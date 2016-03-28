@@ -7,9 +7,7 @@ usage:
 nohup python papertime.py
 
 known issues:
-occasionally doesn't read file list properly and program thinks there are no papers in the directory (fixed?)
-
-TKinter pops up an extra frame, still not sure why
-
-annoying but non-functionally-intrusive TKinter error message prints about some goddamn thing being deprecated
+* occasionally doesn't read file list properly and program thinks there are no papers in the directory (fixed?)
+* TKinter pops up an extra frame, still not sure why
+* annoying but non-functionally-intrusive TKinter error message prints about some goddamn thing being deprecated
  
