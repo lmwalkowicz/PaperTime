@@ -55,13 +55,13 @@ def heypapertime():
         notefilename = filename+'_notes.txt'
         os.system("touch "+'/Users/lucianne/Dropbox/PaperTime/'+notefilename)
         os.system("open "+'/Users/lucianne/Dropbox/PaperTime/'+notefilename)
-        editing = askquestion("Click when finished making notes")
+        editing = askquestion("Paper Time!", "Click when finished making notes")
         os.rename('/Users/lucianne/Dropbox/PaperTime/'+notefilename, '/Users/lucianne/Dropbox/PaperTime/Read/'+notefilename)
     else:
         os.system("rm "+'/Users/lucianne/Dropbox/PaperTime/'+filename)
 
 # run every day at 3pm
-schedule.every().day.at("12:51").do(heypapertime)
+schedule.every().day.at("15:00").do(heypapertime)
 
 while True:
     schedule.run_pending()
