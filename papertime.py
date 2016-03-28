@@ -5,6 +5,7 @@ import sys
 import schedule
 from Tkinter import *
 from tkMessageBox import *
+import timerclock
 
 def getRandomFile(paperPath):
   """
@@ -19,7 +20,7 @@ def getRandomFile(paperPath):
 def readingTimer(duration):
     mins = 0
     while mins != duration:
-        print ">>>>>>>>>>>>>>>>>>>>>", mins
+        #print ">>>>>>>>>>>>>>>>>>>>>", mins
         # Sleep for a minute
         time.sleep(60)
         # Increment the minute total
@@ -34,9 +35,9 @@ def heypapertime():
     
     # exit if there are no files to read bc you have miraculously read them all
     # weirdly buggy, sometimes says None when not true?
-    if filename == "None":
-        print 'No papers in directory!'
-        sys.exit()
+    while filename == "None":
+        filename = getRandomFile('/Users/lucianne/Dropbox/PaperTime/')
+        filename = str(filename)
 
     # want to launch a snippet of music here instead of the cmd-line thing
 
@@ -45,6 +46,7 @@ def heypapertime():
         # open the paper
         os.system("open "+'/Users/lucianne/Dropbox/PaperTime/'+filename)
         # run the timer - number here is in minutes, default is 25 min
+        timerclock.App()
         readingTimer(25)
         # when the timer ends ask if they want to keep reading
         run = askyesno("Paper Time!", "Want to keep reading?")
@@ -60,9 +62,10 @@ def heypapertime():
     else:
         os.system("rm "+'/Users/lucianne/Dropbox/PaperTime/'+filename)
 
-# run every day at 3pm
-schedule.every().day.at("15:00").do(heypapertime)
+if __name__ == '__main__':
+    # run every day at 3pm
+    schedule.every().day.at("15:00").do(heypapertime)
 
-while True:
-    schedule.run_pending()
-    time.sleep(60) # wait one minute
+    while True:
+        schedule.run_pending()
+        time.sleep(60) # wait one minute
