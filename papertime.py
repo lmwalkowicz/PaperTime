@@ -45,7 +45,7 @@ def heypapertime():
         # open the paper
         os.system("open "+'/Users/lucianne/Dropbox/PaperTime/'+filename)
         # run the timer - number here is in minutes, default is 25 min
-        readingTimer(0)
+        readingTimer(25)
         # when the timer ends ask if they want to keep reading
         run = askyesno("Paper Time!", "Want to keep reading?")
         
