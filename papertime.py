@@ -3,7 +3,8 @@
 readDir  = '/Users/wolvebc1/Drop_box/_ReadingList/'
 saveDir  = '/Users/wolvebc1/Drop_box/_ReadingList/Saved/'
 nukeDir  = '/Users/wolvebc1/Drop_box/_ReadingList/Nuked/'
-testMode = False # True
+testMode = False # Running in "development" mode if True
+runQuiet = True  # Don't "say" anything if True
 
 import os
 import sys
@@ -45,22 +46,32 @@ class timerClock():
         else:              self.filename = filename
         self.root = tk.Tk()
         self.customFont = tkFont.Font(family="Helvetica", size=48)
+
+        #--- Add buttons to execute actions. Experimenting with using Frames to
+        #--- hold collections of child widgets to specify their location in the
+        #--- parent (self.root)
+        buttonRow1 = tk.Frame(self.root)
+        buttonRow2 = tk.Frame(self.root)
+        self.wdgt = tk.Button(buttonRow1,text="Read more" ,command=self.reset)
+        self.wdgt.pack(side=tk.LEFT)
+        self.wdgt = tk.Button(buttonRow1,text="Make note" ,command=self.saveIt)
+        self.wdgt.pack(side=tk.RIGHT)
+        self.wdgt = tk.Button(buttonRow2,text="Delete it",command=self.nukeIt,
+                              bg="red")
+        self.wdgt.pack(side=tk.LEFT)
+        self.wdgt = tk.Button(buttonRow2,text="Finished"  ,command=self.quit)
+        self.wdgt.pack(side=tk.RIGHT)
+        buttonRow1.pack(side=tk.TOP,fill=tk.X)
+        buttonRow2.pack(side=tk.TOP,fill=tk.X)
+
+        #--- Create initial timer state.
         self.done_time = datetime.datetime.now() + \
                          datetime.timedelta(seconds=self.delayInMinutes*60)
-
-        self.again = tk.Button(self.root,text='Read More' ,command=self.reset)
-        self.notes = tk.Button(self.root,text='Make note' ,command=self.saveIt)
-        self.nuked = tk.Button(self.root,text='Nuke paper',command=self.nukeIt)
-        self.nomas = tk.Button(self.root,text='Finished'  ,command=self.quit)
-
         self.label = tk.Label(text="", font=self.customFont)
         self.update_time()
-        self.again.pack()
-        self.notes.pack()
-        self.nuked.pack()
-        self.nomas.pack()
-        self.label.pack()
+        self.label.pack(side=tk.BOTTOM)
 
+        #--- Launch timer and start mainloop event handler
         self.update_clock()
         self.root.mainloop()
 
@@ -80,9 +91,8 @@ class timerClock():
             self.update_time()
             self.root.after(1000, self.update_clock)
         else:
-            os.system('say -v Bells time up')
-            if testMode:
-                print "timer expired"
+            if not runQuiet: os.system('say -v Bells time up')
+            if testMode: print "timer expired"
 
     def saveIt(self):
         """Save this paper and perhaps make some notes about it."""
@@ -151,7 +161,7 @@ def heypapertime():
         filename = getRandomFile(readDir)
         filename = str(filename)
     except:
-        os.system('say -v Bells Oops')
+        if not runQuiet: os.system('say -v Bells Oops')
         print "Something seems to have gone wrong! I'm so sorry."
         print "--> ",filename
         sys.exit()
@@ -163,7 +173,7 @@ def heypapertime():
 
     # Want to launch snippet of music here instead of cmd-line 'say' thing - TBD
     if not testMode:
-        os.system('say -v Bells "Paper Time"')
+        if not runQuiet: os.system('say -v Bells "Paper Time"')
 
     # Open the paper
     if not testMode: os.system("open "+q+readDir+filename+q)
@@ -172,7 +182,7 @@ def heypapertime():
     timerClock(delayInMinutes,filename,readDir,saveDir,nukeDir)
 
     if testMode: print "timer destroyed"
-    os.system('say -v Bells all done')
+    if not runQuiet: os.system('say -v Bells all done')
     sys.exit()
 
 
